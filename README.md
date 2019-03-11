@@ -10,10 +10,9 @@ Note: RAPIDS projects take a long time to build. If cudf's c++ code changes, eve
 
 Usage:
 ```bash
-# clone repos
+# clone repos & build docker image:takes 10+ minutes for first build)
 sh setup.sh
-# build Docker image (takes 10+ minutes for first build)
-sudo sh build.sh
+```
 
 ```bash
 # start the container, mounting local data and notebook dev directories
