@@ -6,6 +6,8 @@ The Dockerfile is organized with Python development in-mind. It assumes that und
 
 This lets devs change Python binding code and rebuild the container image frequently without needing to rebuild underlying c++ libraries.
 
+Note: RAPIDS projects take a long time to build. If cudf's c++ code changes, everything that depends on it will be rebuilt (cuML, and cuGraph). If you're only testing cudf, I suggest commenting out the cuML and cuGraph build sections in the Dockerfile.
+
 Usage:
 ```bash
 # clone repos
