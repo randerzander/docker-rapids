@@ -1,3 +1,5 @@
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
 git clone --recurse-submodules https://github.com/rapidsai/custrings
 git clone --recurse-submodules https://github.com/rapidsai/cudf
 
