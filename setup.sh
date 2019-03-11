@@ -9,6 +9,8 @@ git fetch kkraus14
 git checkout kkraus14/fea-ext-string-support
 cd ..
 
+git clone --recurse-submodules https://github.com/rapidsai/cuml
+
 git clone --recurse-submodules https://github.com/rapidsai/cugraph
 
 git clone --recurse-submodules https://github.com/rapidsai/dask-cuda
