@@ -81,6 +81,9 @@ RUN source activate ${CONDA_ENV} && \
 #WORKDIR /custrings/cpp
 #RUN source activate ${CONDA_ENV} && \
 #    make -f Makefile.with_python
+ADD custrings/python /custrings/python
+WORKDIR /custrings/python
+RUN source activate ${CONDA_ENV} && python setup.py install
 
 # build/install libcudf
 ADD cudf/thirdparty /cudf/thirdparty
@@ -118,10 +121,6 @@ RUN source activate ${CONDA_ENV} && \
 
 # Python bindings change faster than underlying c++ libs
 # Build/Install them
-ADD custrings/python /custrings/python
-WORKDIR /custrings/python
-RUN source activate ${CONDA_ENV} && python setup.py install
-
 # cuDF python bindings build/install
 ADD cudf/.git /cudf/.git
 ADD cudf/python /cudf/python
