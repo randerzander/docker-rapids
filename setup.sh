@@ -6,6 +6,7 @@ git clone --recurse-submodules https://github.com/rapidsai/custrings
 git clone --recurse-submodules https://github.com/kkraus14/cudf -b fea-ext-string-support
 
 git clone --recurse-submodules https://github.com/rapidsai/cuml -b branch-0.6
+git clone --recurse-submodules https://github.com/rapidsai/dask-cuml
 
 git clone --recurse-submodules https://github.com/rapidsai/cugraph -b branch-0.6
 

@@ -9,8 +9,8 @@ ENV NUMBAPRO_LIBDEVICE=/usr/local/cuda/nvvm/libdevice/
 # Needed for promptless tzdata install
 ENV DEBIAN_FRONTEND=noninteractive
 
-ARG CC=5
-ARG CXX=5
+ARG CC=7
+ARG CXX=7
 RUN apt update -y --fix-missing && \
     apt upgrade -y && \
       apt install -y \
@@ -48,27 +48,8 @@ ENV LC_ALL en_US.UTF-8
 ENV CC=/usr/bin/gcc-${CC}
 ENV CXX=/usr/bin/g++-${CXX}
 
-ADD rapidsai-xgboost /xgboost
-WORKDIR /xgboost
-RUN source activate ${CONDA_ENV} && \
-    mkdir -p /xgboost/build && \
-    cd /xgboost/build && \
-    cmake .. -DUSE_CUDA=ON -DUSE_NCCL=ON && \
-    make -j && \
-    cd /xgboost/python-package && \
-    python setup.py install && \
-    export PYTHONPATH=/xgboost/python-package && \
-    cd /xgboost/build && \
-    make clean && \
-    cmake .. -DUSE_CUDA=ON -DUSE_NCCL=ON && \
-    make install -j
-
-ADD dask-xgboost /dask-xgboost
-WORKDIR /dask-xgboost
-RUN source activate ${CONDA_ENV} && python setup.py install
-
-ADD custrings/cpp /custrings/cpp
 ADD custrings/LICENSE /custrings/LICENSE
+ADD custrings/cpp /custrings/cpp
 ADD custrings/thirdparty /custrings/thirdparty
 
 # Build/install custrings
@@ -92,32 +73,49 @@ WORKDIR /cudf/cpp
 RUN source activate ${CONDA_ENV} && \
     mkdir -p /cudf/cpp/build && \
     cd /cudf/cpp/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} -DCMAKE_CXX11_ABI=ON && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} -DCMAKE_CXX11_ABI=ON -DCMAKE_BUILD_TYPE=Debug && \
     make -j install && \
     make python_cffi && \
     make install_python
+
+ADD rapidsai-xgboost /xgboost
+WORKDIR /xgboost
+RUN source activate ${CONDA_ENV} && \
+    mkdir -p /xgboost/build && cd /xgboost/build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX \
+          -DCMAKE_C_COMPILER=${CC} -DCMAKE_CXX_COMPILER=${CXX} \
+          -DUSE_CUDF=ON -DCMAKE_CXX11_ABI=ON \
+          -DUSE_CUDA=ON -DUSE_NCCL=ON && \
+    make -j && \
+    cd /xgboost/python-package && \
+    python setup.py bdist_wheel && \
+    pip install /xgboost/python-package/dist/xgboost*.whl
+
+ADD dask-xgboost /dask-xgboost
+WORKDIR /dask-xgboost
+RUN source activate ${CONDA_ENV} && python setup.py install
 
 # build/install cuml
 ADD cuml/thirdparty /cuml/thirdparty
 ADD cuml/ml-prims /cuml/ml-prims
 ADD cuml/cuML /cuml/cuML
 WORKDIR /cuml/cuML
-RUN source activate ${CONDA_ENV} && \
-    mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-    make -j && \
-    make install
+#RUN source activate ${CONDA_ENV} && \
+#    mkdir build && \
+#    cd build && \
+#    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
+#    make -j && \
+#    make install
 
 # build/install cugraph
 ADD cugraph/thirdparty /cugraph/thirdparty
 ADD cugraph/cpp /cugraph/cpp
 WORKDIR /cugraph/cpp
-RUN source activate ${CONDA_ENV} && \
-    mkdir -p /cugraph/cpp/build && \
-    cd /cugraph/cpp/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-    make -j install
+#RUN source activate ${CONDA_ENV} && \
+#    mkdir -p /cugraph/cpp/build && \
+#    cd /cugraph/cpp/build && \
+#    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
+#    make -j install
 
 # Python bindings change faster than underlying c++ libs
 # Build/Install them
@@ -129,15 +127,15 @@ RUN source activate ${CONDA_ENV} && \
     python setup.py build_ext --inplace && \
     python setup.py install
 
-ADD cuml/python /cuml/python
-WORKDIR /cuml/python
-RUN source activate ${CONDA_ENV} && \
-    python setup.py build_ext --inplace && \
-    python setup.py install
+#ADD cuml/python /cuml/python
+#WORKDIR /cuml/python
+#RUN source activate ${CONDA_ENV} && \
+#    python setup.py build_ext --inplace && \
+#    python setup.py install
 
-ADD cugraph/python /cugraph/python
-WORKDIR /cugraph/python
-RUN source activate ${CONDA_ENV} && python setup.py install
+#ADD cugraph/python /cugraph/python
+#WORKDIR /cugraph/python
+#RUN source activate ${CONDA_ENV} && python setup.py install
 
 # doc builds
 ADD custrings/docs /custrings/docs
@@ -154,6 +152,11 @@ RUN source activate ${CONDA_ENV} && python setup.py install
 ADD dask-cudf /dask-cudf
 WORKDIR /dask-cudf
 RUN source activate ${CONDA_ENV} && python setup.py install
+
+# install dask-cuml
+ADD dask-cuml /dask-cuml
+WORKDIR /dask-cuml
+#RUN source activate ${CONDA_ENV} && python setup.py install
 
 #WORKDIR /cudf/docs
 #CMD source activate ${CONDA_ENV} && make html && cd build/html && python -m http.server
