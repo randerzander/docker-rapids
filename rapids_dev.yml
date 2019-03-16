@@ -16,6 +16,7 @@ dependencies:
 - distributed>=1.23.0
 - cython>=0.29,<0.30
 - pytest
+# required for building rapids project docs
 - sphinx
 - sphinx_rtd_theme
 - sphinxcontrib-websupport
