@@ -64,6 +64,7 @@ RUN source activate ${CONDA_ENV} && \
 #    make -f Makefile.with_python
 ADD custrings/python /custrings/python
 WORKDIR /custrings/python
+RUN source activate ${CONDA_ENV} && pip install cmake_setuptools
 RUN source activate ${CONDA_ENV} && python setup.py install
 
 # build/install libcudf
@@ -100,22 +101,22 @@ ADD cuml/thirdparty /cuml/thirdparty
 ADD cuml/ml-prims /cuml/ml-prims
 ADD cuml/cuML /cuml/cuML
 WORKDIR /cuml/cuML
-#RUN source activate ${CONDA_ENV} && \
-#    mkdir build && \
-#    cd build && \
-#    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-#    make -j && \
-#    make install
+RUN source activate ${CONDA_ENV} && \
+    mkdir build && \
+    cd build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
+    make -j && \
+    make install
 
 # build/install cugraph
 ADD cugraph/thirdparty /cugraph/thirdparty
 ADD cugraph/cpp /cugraph/cpp
 WORKDIR /cugraph/cpp
-#RUN source activate ${CONDA_ENV} && \
-#    mkdir -p /cugraph/cpp/build && \
-#    cd /cugraph/cpp/build && \
-#    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-#    make -j install
+RUN source activate ${CONDA_ENV} && \
+    mkdir -p /cugraph/cpp/build && \
+    cd /cugraph/cpp/build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
+    make -j install
 
 # Python bindings change faster than underlying c++ libs
 # Build/Install them
@@ -127,15 +128,15 @@ RUN source activate ${CONDA_ENV} && \
     python setup.py build_ext --inplace && \
     python setup.py install
 
-#ADD cuml/python /cuml/python
-#WORKDIR /cuml/python
-#RUN source activate ${CONDA_ENV} && \
-#    python setup.py build_ext --inplace && \
-#    python setup.py install
+ADD cuml/python /cuml/python
+WORKDIR /cuml/python
+RUN source activate ${CONDA_ENV} && \
+    python setup.py build_ext --inplace && \
+    python setup.py install
 
-#ADD cugraph/python /cugraph/python
-#WORKDIR /cugraph/python
-#RUN source activate ${CONDA_ENV} && python setup.py install
+ADD cugraph/python /cugraph/python
+WORKDIR /cugraph/python
+RUN source activate ${CONDA_ENV} && python setup.py install
 
 # doc builds
 ADD custrings/docs /custrings/docs
@@ -156,9 +157,7 @@ RUN source activate ${CONDA_ENV} && python setup.py install
 # install dask-cuml
 ADD dask-cuml /dask-cuml
 WORKDIR /dask-cuml
-#RUN source activate ${CONDA_ENV} && python setup.py install
+RUN source activate ${CONDA_ENV} && python setup.py install
 
-#WORKDIR /cudf/docs
-#CMD source activate ${CONDA_ENV} && make html && cd build/html && python -m http.server
 WORKDIR /notebooks
 CMD source activate ${CONDA_ENV} && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token=''
