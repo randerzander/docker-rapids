@@ -6,13 +6,13 @@ The Dockerfile uses [multi-stage builds](https://docs.docker.com/develop/develop
 
 It has several targets:
 
-1. [rapids-base](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L4) - base environment with apt & conda packages necessary to build future stages
-2. [custrings](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L51) - built from rapids-base, includes custrings/nvstrings built from source
-3. [cudf](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L68) - built from custrings, includes cudf built from source against the source build of custrings
-4. [xgboost](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L96) - built from cudf, includes xgboost built from source against the source build of cudf
-5. [cuml](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L115) - built from cudf, includes cuml built from source against the source build of cudf
-6. [cugraph](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L138) - built from cudf, includes cugraph built from source against the source build of cudf
-7. [rapids](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L152). - built from cudf, includes all packages & Jupyterlab, useful for workflow testing
+1. [RAPIDS-BASE](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L4) - base environment with apt & conda packages necessary to build future stages
+2. [CUSTRINGS](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L51) - built from rapids-base, includes custrings/nvstrings built from source
+3. [CUDF](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L68) - built from custrings, includes cudf built from source against the source build of custrings
+4. [XGBOOST](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L96) - built from cudf, includes xgboost built from source against the source build of cudf
+5. [CUML](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L115) - built from cudf, includes cuml built from source against the source build of cudf
+6. [CUGRAPH](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L138) - built from cudf, includes cugraph built from source against the source build of cudf
+7. [RAPIDS](https://github.com/randerzander/docker-rapids/blob/multistage-builds/Dockerfile#L152). - built from cudf, includes all packages & Jupyterlab, useful for workflow testing
 
 The various stages are organized with Python development in-mind. It assumes that underlying cpp code changes less often than Python bindings, and thus builds c++ libraries first, then installs Python bindings.
 
