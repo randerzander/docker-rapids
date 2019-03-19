@@ -1,7 +1,7 @@
 # An integration test & dev container which builds and installs RAPIDS from latest source branches
-ARG CUDA_VERSION=10.0
+ARG CUDA_VERSION=9.2
 ARG LINUX_VERSION=ubuntu18.04
-FROM nvidia/cuda:${CUDA_VERSION}-devel-${LINUX_VERSION}
+FROM nvidia/cuda:${CUDA_VERSION}-devel-${LINUX_VERSION} as BASE
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib
 # Needed for cudf.concat(), avoids "OSError: library nvvm not found"
 ENV NUMBAPRO_NVVM=/usr/local/cuda/nvvm/lib64/libnvvm.so
@@ -33,52 +33,17 @@ SHELL ["/bin/bash", "-c"]
 ENV CONDA_ENV=rapids
 ADD rapids_dev.yml /conda/environments/rapids_dev.yml
 RUN conda env create --name ${CONDA_ENV} --file /conda/environments/rapids_dev.yml
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/${CONDA_ENV}/lib
 
 # Added here to prevent re-downloading after changes to custrings, cudf, cugraph src, etc
-RUN source activate ${CONDA_ENV} && conda install -c nvidia/label/cuda10.0 -c defaults \
-    nvgraph jupyterlab bokeh s3fs scikit-learn scipy
+RUN source activate ${CONDA_ENV} && conda install -c conda-forge \
+    jupyterlab bokeh s3fs cmake scikit-learn scipy
 
-ENV PYNI_PATH=/conda/envs/${CONDA_ENV}
-ENV PYTHON_VERSION=3.7
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV CC=/usr/bin/gcc-${CC}
-ENV CXX=/usr/bin/g++-${CXX}
+FROM BASE as CONDA
 
-ADD custrings/LICENSE /custrings/LICENSE
-ADD custrings/cpp /custrings/cpp
-ADD custrings/thirdparty /custrings/thirdparty
+ENV CC=/usr/bin/gcc-7
+ENV CXX=/usr/bin/g++-7
 
-# Build/install custrings
-ENV CMAKE_CXX11_ABI=ON
-RUN source activate ${CONDA_ENV} && \
-    mkdir -p /custrings/cpp/build && \
-    cd /custrings/cpp/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} -DCMAKE_CXX11_ABI=ON && \
-    make -j install
-#WORKDIR /custrings/cpp
-#RUN source activate ${CONDA_ENV} && \
-#    make -f Makefile.with_python
-ADD custrings/python /custrings/python
-WORKDIR /custrings/python
-RUN source activate ${CONDA_ENV} && pip install cmake_setuptools
-RUN source activate ${CONDA_ENV} && python setup.py install
-
-# build/install libcudf
-ADD cudf/thirdparty /cudf/thirdparty
-ADD cudf/cpp /cudf/cpp
-WORKDIR /cudf/cpp
-RUN source activate ${CONDA_ENV} && \
-    mkdir -p /cudf/cpp/build && \
-    cd /cudf/cpp/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} -DCMAKE_CXX11_ABI=ON -DCMAKE_BUILD_TYPE=Debug && \
-    make -j install && \
-    make python_cffi && \
-    make install_python
-
+# Must build/install xgboost from source for cudf-interop
 ADD rapidsai-xgboost /xgboost
 WORKDIR /xgboost
 RUN source activate ${CONDA_ENV} && \
@@ -94,69 +59,6 @@ RUN source activate ${CONDA_ENV} && \
 
 ADD dask-xgboost /dask-xgboost
 WORKDIR /dask-xgboost
-RUN source activate ${CONDA_ENV} && python setup.py install
-
-# build/install cuml
-ADD cuml/thirdparty /cuml/thirdparty
-ADD cuml/ml-prims /cuml/ml-prims
-ADD cuml/cuML /cuml/cuML
-WORKDIR /cuml/cuML
-RUN source activate ${CONDA_ENV} && \
-    mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-    make -j && \
-    make install
-
-# build/install cugraph
-ADD cugraph/thirdparty /cugraph/thirdparty
-ADD cugraph/cpp /cugraph/cpp
-WORKDIR /cugraph/cpp
-RUN source activate ${CONDA_ENV} && \
-    mkdir -p /cugraph/cpp/build && \
-    cd /cugraph/cpp/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-    make -j install
-
-# Python bindings change faster than underlying c++ libs
-# Build/Install them
-# cuDF python bindings build/install
-ADD cudf/.git /cudf/.git
-ADD cudf/python /cudf/python
-RUN source activate ${CONDA_ENV} && \
-    cd /cudf/python && \
-    python setup.py build_ext --inplace && \
-    python setup.py install
-
-ADD cuml/python /cuml/python
-WORKDIR /cuml/python
-RUN source activate ${CONDA_ENV} && \
-    python setup.py build_ext --inplace && \
-    python setup.py install
-
-ADD cugraph/python /cugraph/python
-WORKDIR /cugraph/python
-RUN source activate ${CONDA_ENV} && python setup.py install
-
-# doc builds
-ADD custrings/docs /custrings/docs
-ADD cudf/docs /cudf/docs
-ADD cuml/docs /cuml/docs
-ADD cugraph/docs /cugraph/docs
-
-# install dask-cuda
-ADD dask-cuda /dask-cuda
-WORKDIR /dask-cuda
-RUN source activate ${CONDA_ENV} && python setup.py install
-
-# install dask-cudf
-ADD dask-cudf /dask-cudf
-WORKDIR /dask-cudf
-RUN source activate ${CONDA_ENV} && python setup.py install
-
-# install dask-cuml
-ADD dask-cuml /dask-cuml
-WORKDIR /dask-cuml
 RUN source activate ${CONDA_ENV} && python setup.py install
 
 WORKDIR /notebooks
