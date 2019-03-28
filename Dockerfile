@@ -31,20 +31,16 @@ SHELL ["/bin/bash", "-c"]
 
 # Build cuDF conda env
 ENV CONDA_ENV=rapids
-ADD rapids_dev.yml /conda/environments/rapids_dev.yml
+ADD conda /conda/environments
 RUN conda env create --name ${CONDA_ENV} --file /conda/environments/rapids_dev.yml
 
-# Added here to prevent re-downloading after changes to custrings, cudf, cugraph src, etc
-RUN source activate ${CONDA_ENV} && conda install -c conda-forge \
-    jupyterlab bokeh s3fs cmake scikit-learn scipy
-
-FROM BASE as CONDA
-
-ENV CC=/usr/bin/gcc-7
-ENV CXX=/usr/bin/g++-7
+# useful user-level customizations
+RUN source activate ${CONDA_ENV} && conda env update --name ${CONDA_ENV} -f=/conda/environments/useful_packages.yml
 
 # Must build/install xgboost from source for cudf-interop
-ADD rapidsai-xgboost /xgboost
+ENV CC=/usr/bin/gcc-7
+ENV CXX=/usr/bin/g++-7
+ADD xgboost /xgboost
 WORKDIR /xgboost
 RUN source activate ${CONDA_ENV} && \
     mkdir -p /xgboost/build && cd /xgboost/build && \

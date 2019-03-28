@@ -2,12 +2,15 @@ name: rapids_dev
 channels:
 - rapidsai-nightly
 - nvidia
-- numba
 - conda-forge
-- defaults
+- numba
+# remove once https://github.com/rapidsai/cugraph/pull/191 merges
+- rapidsai/label/dev
 dependencies:
 - python>=3.6,<3.8
 - distributed>=1.23.0
+- cmake
+# rapids packages
 - nvstrings
 - cudf
 - dask-cuda
