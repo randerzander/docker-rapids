@@ -1,5 +1,5 @@
 # An integration test & dev container which builds and installs RAPIDS from latest source branches
-ARG CUDA_VERSION=10.0
+ARG CUDA_VERSION=9.2
 ARG LINUX_VERSION=ubuntu18.04
 FROM nvidia/cuda:${CUDA_VERSION}-devel-${LINUX_VERSION} as RAPIDS-BASE
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib
@@ -29,14 +29,11 @@ SHELL ["/bin/bash", "-c"]
 
 # Build cuDF conda env
 ENV CONDA_ENV=rapids
-ADD rapids_dev.yml /conda/environments/rapids_dev.yml
+ADD conda /conda/environments
 RUN conda env create --name ${CONDA_ENV} --file /conda/environments/rapids_dev.yml
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/${CONDA_ENV}/lib
 
-# Added here to prevent re-downloading after changes to custrings, cudf, cugraph src, etc
-RUN source activate ${CONDA_ENV} && conda install -c nvidia/label/cuda10.0 -c defaults \
-    nvgraph jupyterlab bokeh s3fs scikit-learn scipy
-RUN source activate ${CONDA_ENV} && pip install cmake_setuptools
+RUN source activate ${CONDA_ENV} && conda env update --name ${CONDA_ENV} -f=/conda/environments/useful_packages.yml
 
 ENV PYNI_PATH=/conda/envs/${CONDA_ENV}
 ENV PYTHON_VERSION=3.7
@@ -94,7 +91,7 @@ ADD cudf/docs /cudf/docs
 
 # xgboost
 FROM CUDF as XGBOOST
-ADD rapidsai-xgboost /xgboost
+ADD xgboost /xgboost
 WORKDIR /xgboost
 RUN source activate ${CONDA_ENV} && \
     mkdir -p /xgboost/build && cd /xgboost/build && \
@@ -111,27 +108,27 @@ ADD dask-xgboost /dask-xgboost
 WORKDIR /dask-xgboost
 RUN source activate ${CONDA_ENV} && python setup.py install
 
-# cuml
+# cuml -- builds currently broken, skipping for now
 FROM CUDF as CUML
 ADD cuml/thirdparty /cuml/thirdparty
 ADD cuml/ml-prims /cuml/ml-prims
 ADD cuml/cuML /cuml/cuML
 WORKDIR /cuml/cuML
-RUN source activate ${CONDA_ENV} && \
-    mkdir build && \
-    cd build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-    make -j && \
-    make install
+#RUN source activate ${CONDA_ENV} && \
+#    mkdir build && \
+#    cd build && \
+#    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
+#    make -j && \
+#    make install
 ADD cuml/python /cuml/python
 WORKDIR /cuml/python
-RUN source activate ${CONDA_ENV} && \
-    python setup.py build_ext --inplace && \
-    python setup.py install
+#RUN source activate ${CONDA_ENV} && \
+#    python setup.py build_ext --inplace && \
+#    python setup.py install
 ADD dask-cuml /dask-cuml
 WORKDIR /dask-cuml
-RUN source activate ${CONDA_ENV} && python setup.py install
-RUN source activate ${CONDA_ENV} && python -c "import cuml; print('cuML JIT compiled..')"
+#RUN source activate ${CONDA_ENV} && python setup.py install && \
+#    python -c "import cuml; print('cuML JIT compiled..')"
 ADD cuml/docs /cuml/docs
 
 # cugraph

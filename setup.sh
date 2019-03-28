@@ -1,23 +1,32 @@
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+if [ ! -f Miniconda3-latest-Linux-x86_64.sh ]; then
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+fi
 
-git clone https://github.com/rapidsai/custrings -b branch-0.3
+# cleanup previous clones
+rm -rf cu*
+rm -rf dask*
+rm -rf xgboost
+
+BRANCH=branch-0.7
+
+git clone https://github.com/rapidsai/custrings -b branch-0.4
 cd custrings
-git submodule update --init --recursive
+git submodule update --init --recursive --remote
 cd ..
 
-git clone https://github.com/rapidsai/cudf -b branch-0.6
+git clone https://github.com/rapidsai/cudf -b $BRANCH
 cd cudf
-git submodule update --init --recursive
+git submodule update --init --recursive --remote
 cd ..
 
-git clone https://github.com/rapidsai/cuml -b branch-0.6
+git clone https://github.com/rapidsai/cuml -b $BRANCH
 cd cuml
-git submodule update --init --recursive
+git submodule update --init --recursive --remote
 cd ..
 
-git clone https://github.com/rapidsai/cugraph -b branch-0.6
+git clone https://github.com/rapidsai/cugraph -b $BRANCH
 cd cugraph
-git submodule update --init --recursive
+git submodule update --init --recursive --remote
 cd ..
 
 git clone --recurse-submodules https://github.com/rapidsai/dask-cudf
@@ -28,15 +37,15 @@ cd ..
 
 git clone --recurse-submodules https://github.com/rapidsai/dask-cuml
 git clone --recurse-submodules https://github.com/rapidsai/dask-cuda
-git clone --recurse-submodules https://github.com/rapidsai/dask-xgboost
+
+git clone --recurse-submodules https://github.com/rapidsai/dask-xgboost -b dask-cudf
 
 
-git clone --recursive https://github.com/rapidsai/xgboost -b cudf-interop rapidsai-xgboost
-cd rapidsai-xgboost && git submodule update --init --recursive -- dmlc-core
+git clone --recursive https://github.com/rapidsai/xgboost -b cudf-interop xgboost
+cd xgboost && git submodule update --init --recursive --remote -- dmlc-core
 
 #git clone --recursive https://github.com/dmlc/xgboost.git
 #git clone  https://github.com/dmlc/xgboost
 #cd xgboost && git submodule update --init --recursive -- dmlc-core
 
 cd ..
-docker build -t rapids .

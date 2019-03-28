@@ -1,0 +1,10 @@
+name: rapids_dev
+channels:
+- conda-forge
+dependencies:
+- jupyterlab
+- bokeh
+- python-graphviz
+- scikit-learn
+- matplotlib
+- s3fs
