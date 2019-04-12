@@ -1,5 +1,5 @@
 # An integration test & dev container which builds and installs RAPIDS from latest source branches
-ARG CUDA_VERSION=9.2
+ARG CUDA_VERSION=10.0
 ARG LINUX_VERSION=ubuntu18.04
 FROM nvidia/cuda:${CUDA_VERSION}-devel-${LINUX_VERSION} as RAPIDS-BASE
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib
@@ -53,9 +53,16 @@ ADD custrings/cpp /custrings/cpp
 ADD custrings/thirdparty /custrings/thirdparty
 ENV CMAKE_CXX11_ABI=ON
 RUN source activate ${CONDA_ENV} && \
+    mkdir -p /custrings/thirdparty/rmm/build && \
+    cd /custrings/thirdparty/rmm/build && \
+    cmake .. && make install
+RUN source activate ${CONDA_ENV} && \
     mkdir -p /custrings/cpp/build && \
     cd /custrings/cpp/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} -DCMAKE_CXX11_ABI=ON && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} \
+             -DCMAKE_CXX11_ABI=ON \
+             -DRMM_ROOT=/custrings/thirdparty/rmm \
+             -DRMM_INCLUDE=/custrings/thirdparty/rmm/include && \ 
     make -j install
 ADD custrings/python /custrings/python
 WORKDIR /custrings/python
@@ -108,7 +115,7 @@ ADD dask-xgboost /dask-xgboost
 WORKDIR /dask-xgboost
 RUN source activate ${CONDA_ENV} && python setup.py install
 
-# cuml -- builds currently broken, skipping for now
+# cuml
 FROM CUDF as CUML
 ADD cuml/thirdparty /cuml/thirdparty
 ADD cuml/ml-prims /cuml/ml-prims
@@ -124,11 +131,11 @@ ADD cuml/python /cuml/python
 WORKDIR /cuml/python
 #RUN source activate ${CONDA_ENV} && \
 #    python setup.py build_ext --inplace && \
-#    python setup.py install
+#    python setup.py install && \
+#    python -c "import cuml; print('cuML JIT compiled..')"
 ADD dask-cuml /dask-cuml
 WORKDIR /dask-cuml
-#RUN source activate ${CONDA_ENV} && python setup.py install && \
-#    python -c "import cuml; print('cuML JIT compiled..')"
+#RUN source activate ${CONDA_ENV} && python setup.py install
 ADD cuml/docs /cuml/docs
 
 # cugraph
