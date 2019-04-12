@@ -61,7 +61,6 @@ RUN source activate ${CONDA_ENV} && \
     cd /custrings/cpp/build && \
     cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} \
              -DCMAKE_CXX11_ABI=ON \
-             -DRMM_ROOT=/custrings/thirdparty/rmm \
              -DRMM_INCLUDE=/custrings/thirdparty/rmm/include && \ 
     make -j install
 ADD custrings/python /custrings/python
