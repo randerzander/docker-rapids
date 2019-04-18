@@ -47,21 +47,32 @@ ENV CXX=/usr/bin/g++-${CXX}
 # Start of RAPIDS project build sections
 FROM RAPIDS-BASE as CUSTRINGS
 
+ADD rmm /rmm
+WORKDIR /rmm
+RUN source activate ${CONDA_ENV} && \
+    mkdir build && \
+    cd build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} && \
+    make -j install && \
+    cd /rmm/python && \
+    python setup.py install
+
 # custrings
 ADD custrings/LICENSE /custrings/LICENSE
 ADD custrings/cpp /custrings/cpp
 ADD custrings/thirdparty /custrings/thirdparty
 ENV CMAKE_CXX11_ABI=ON
-RUN source activate ${CONDA_ENV} && \
-    mkdir -p /custrings/thirdparty/rmm/build && \
-    cd /custrings/thirdparty/rmm/build && \
-    cmake .. && make install
+#RUN source activate ${CONDA_ENV} && \
+#    mkdir -p /custrings/thirdparty/rmm/build && \
+#    cd /custrings/thirdparty/rmm/build && \
+#    cmake .. && make install
+             #-DRMM_INCLUDE=/custrings/thirdparty/rmm/include && \ 
 RUN source activate ${CONDA_ENV} && \
     mkdir -p /custrings/cpp/build && \
     cd /custrings/cpp/build && \
     cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} \
              -DCMAKE_CXX11_ABI=ON \
-             -DRMM_INCLUDE=/custrings/thirdparty/rmm/include && \ 
+             -DRMM_INCLUDE=/rmm/include && \ 
     make -j install
 ADD custrings/python /custrings/python
 WORKDIR /custrings/python

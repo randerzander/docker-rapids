@@ -9,6 +9,8 @@ rm -rf xgboost
 
 BRANCH=branch-0.7
 
+git clone --recurse-submodules https://github.com/rapidsai/rmm -b ${BRANCH}
+
 git clone https://github.com/rapidsai/custrings -b branch-0.4
 cd custrings
 git submodule update --init --recursive --remote
