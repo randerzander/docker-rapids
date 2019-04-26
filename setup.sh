@@ -3,6 +3,7 @@ if [ ! -f Miniconda3-latest-Linux-x86_64.sh ]; then
 fi
 
 # cleanup previous clones
+rm -rf rmm
 rm -rf cu*
 rm -rf dask*
 rm -rf xgboost
