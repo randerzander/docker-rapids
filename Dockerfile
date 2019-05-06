@@ -62,11 +62,6 @@ ADD custrings/LICENSE /custrings/LICENSE
 ADD custrings/cpp /custrings/cpp
 ADD custrings/thirdparty /custrings/thirdparty
 ENV CMAKE_CXX11_ABI=ON
-#RUN source activate ${CONDA_ENV} && \
-#    mkdir -p /custrings/thirdparty/rmm/build && \
-#    cd /custrings/thirdparty/rmm/build && \
-#    cmake .. && make install
-             #-DRMM_INCLUDE=/custrings/thirdparty/rmm/include && \ 
 RUN source activate ${CONDA_ENV} && \
     mkdir -p /custrings/cpp/build && \
     cd /custrings/cpp/build && \
@@ -89,9 +84,7 @@ RUN source activate ${CONDA_ENV} && \
     mkdir -p /cudf/cpp/build && \
     cd /cudf/cpp/build && \
     cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} -DCMAKE_CXX11_ABI=ON -DCMAKE_BUILD_TYPE=Debug && \
-    make -j install && \
-    make python_cffi && \
-    make install_python
+    make -j install
 ADD cudf/.git /cudf/.git
 ADD cudf/python /cudf/python
 RUN source activate ${CONDA_ENV} && \
@@ -107,7 +100,7 @@ RUN source activate ${CONDA_ENV} && python setup.py install
 ADD cudf/docs /cudf/docs
 
 # xgboost
-FROM CUDF as XGBOOST
+#FROM CUDF as XGBOOST
 ADD xgboost /xgboost
 WORKDIR /xgboost
 RUN source activate ${CONDA_ENV} && \
@@ -116,17 +109,18 @@ RUN source activate ${CONDA_ENV} && \
           -DCMAKE_C_COMPILER=${CC} -DCMAKE_CXX_COMPILER=${CXX} \
           -DUSE_CUDF=ON -DCMAKE_CXX11_ABI=ON \
           -DUSE_CUDA=ON -DUSE_NCCL=ON && \
-    make -j && \
+    make -j install && \
     cd /xgboost/python-package && \
     python setup.py bdist_wheel && \
-    pip install /xgboost/python-package/dist/xgboost*.whl
+    python setup.py install
+    #pip install /xgboost/python-package/dist/xgboost*.whl
 
 ADD dask-xgboost /dask-xgboost
 WORKDIR /dask-xgboost
 RUN source activate ${CONDA_ENV} && python setup.py install
 
 # cuml
-FROM CUDF as CUML
+#FROM CUDF as CUML
 ADD cuml/thirdparty /cuml/thirdparty
 ADD cuml/ml-prims /cuml/ml-prims
 ADD cuml/cuML /cuml/cuML
@@ -137,8 +131,8 @@ WORKDIR /cuml/cuML
 #    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
 #    make -j && \
 #    make install
-ADD cuml/python /cuml/python
-WORKDIR /cuml/python
+#ADD cuml/python /cuml/python
+#WORKDIR /cuml/python
 #RUN source activate ${CONDA_ENV} && \
 #    python setup.py build_ext --inplace && \
 #    python setup.py install && \
@@ -149,20 +143,20 @@ WORKDIR /dask-cuml
 ADD cuml/docs /cuml/docs
 
 # cugraph
-FROM CUDF as CUGRAPH
-ADD cugraph/thirdparty /cugraph/thirdparty
-ADD cugraph/cpp /cugraph/cpp
-WORKDIR /cugraph/cpp
-RUN source activate ${CONDA_ENV} && \
-    mkdir -p /cugraph/cpp/build && \
-    cd /cugraph/cpp/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-    make -j install
-ADD cugraph/python /cugraph/python
-WORKDIR /cugraph/python
-RUN source activate ${CONDA_ENV} && python setup.py install
-ADD cugraph/docs /cugraph/docs
+#FROM CUDF as CUGRAPH
+#ADD cugraph/thirdparty /cugraph/thirdparty
+#ADD cugraph/cpp /cugraph/cpp
+#WORKDIR /cugraph/cpp
+#RUN source activate ${CONDA_ENV} && \
+#    mkdir -p /cugraph/cpp/build && \
+#    cd /cugraph/cpp/build && \
+#    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
+#    make -j install
+#ADD cugraph/python /cugraph/python
+#WORKDIR /cugraph/python
+#RUN source activate ${CONDA_ENV} && python setup.py install
+#ADD cugraph/docs /cugraph/docs
 
-FROM CUDF as RAPIDS
+#FROM CUDF as RAPIDS
 WORKDIR /notebooks
 CMD source activate ${CONDA_ENV} && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token=''

@@ -24,6 +24,7 @@ dependencies:
 - ipython
 - recommonmark
 - pandoc=<2.0.0
+- pip
 - pip:
   - sphinx-markdown-tables
   - cmake_setuptools
