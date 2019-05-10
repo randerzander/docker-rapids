@@ -1,20 +1,22 @@
-name: rapids_dev
+name: rapids
 channels:
-- rapidsai-nightly
-- nvidia
-- conda-forge
-- numba
-# remove once https://github.com/rapidsai/cugraph/pull/191 merges
-- rapidsai/label/dev
+  - rapidsai-nightly/label/cuda10.0
+  - rapidsai/label/xgboost
+  - nvidia
+  - conda-forge
+  - numba
+  - pytorch
 dependencies:
-- python>=3.6,<3.8
-- distributed>=1.23.0
-- cmake
-# rapids packages
-- nvstrings
-- cudf
-- dask-cuda
-- dask-cudf
-- cuml
-- nvgraph
-- cugraph
+  - python=3.7
+  - cudatoolkit=10.0
+  - dask-cuda=<0.8.0
+  - cudf=<0.8.0
+  - dask-cudf=<0.8.0
+  - cuml=<0.8.0
+  - dask-cuml=<0.8.0
+  - rapidsai/label/xgboost::xgboost=0.83.*
+  - rapidsai/label/xgboost::dask-xgboost=0.2.*
+  - cython
+  - dask
+  - distributed
+  - gcsfs
