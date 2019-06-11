@@ -1,22 +1,16 @@
-name: rapids
 channels:
-  - rapidsai-nightly/label/cuda10.0
   - rapidsai/label/xgboost
+  - rapidsai-nightly
+  - rapidsai
   - nvidia
   - conda-forge
-  - numba
-  - pytorch
 dependencies:
-  - python=3.7
   - cudatoolkit=10.0
-  - dask-cuda=<0.8.0
-  - cudf=<0.8.0
-  - dask-cudf=<0.8.0
-  - cuml=<0.8.0
-  - dask-cuml=<0.8.0
-  - rapidsai/label/xgboost::xgboost=0.83.*
-  - rapidsai/label/xgboost::dask-xgboost=0.2.*
-  - cython
-  - dask
-  - distributed
-  - gcsfs
+  - dask-cuda=>0.8
+  - cudf=>0.8
+  - dask-cudf=>0.8
+  - cuml=>0.8
+  - dask-cuml=>0.8
+  - cugraph=>0.8
+  - rapidsai-nightly/label/xgboost::xgboost=>0.8
+  - rapidsai-nightly/label/xgboost::dask-xgboost=>0.2
