@@ -8,11 +8,11 @@ rm -rf cu*
 rm -rf dask*
 rm -rf xgboost
 
-BRANCH=branch-0.7
+BRANCH=branch-0.8
 
 git clone --recurse-submodules https://github.com/rapidsai/rmm -b ${BRANCH}
 
-git clone https://github.com/rapidsai/custrings -b branch-0.4
+git clone https://github.com/rapidsai/custrings -b $BRANCH
 cd custrings
 git submodule update --init --recursive --remote
 cd ..
@@ -20,6 +20,8 @@ cd ..
 git clone https://github.com/rapidsai/cudf -b $BRANCH
 cd cudf
 git submodule update --init --recursive --remote
+git fetch origin pull/2018/head:groupby
+git checkout groupby
 cd ..
 
 git clone https://github.com/rapidsai/cuml -b $BRANCH

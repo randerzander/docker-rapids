@@ -1,10 +1,11 @@
 name: rapids_dev
 channels:
 - nvidia
-- numba
 - conda-forge
+- rapidsai
 dependencies:
-- nvgraph
+- cudatoolkit=9.2
+- clangdev
 - cmake>=3.12
 - python>=3.6,<3.8
 - numba>=0.40

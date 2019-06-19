@@ -1,5 +1,5 @@
 # An integration test & dev container which builds and installs RAPIDS from latest source branches
-ARG CUDA_VERSION=10.0
+ARG CUDA_VERSION=9.2
 ARG LINUX_VERSION=ubuntu18.04
 FROM nvidia/cuda:${CUDA_VERSION}-devel-${LINUX_VERSION} as RAPIDS-BASE
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib
@@ -17,7 +17,6 @@ RUN apt update -y --fix-missing && \
       git \
       gcc-${CC} \
       g++-${CXX} \
-      libboost-all-dev \
       tzdata \
       locales
 
@@ -79,14 +78,11 @@ FROM CUSTRINGS as CUDF
 # cudf
 ADD cudf/thirdparty /cudf/thirdparty
 ADD cudf/cpp /cudf/cpp
-WORKDIR /cudf/cpp
-RUN source activate ${CONDA_ENV} && \
-    mkdir -p /cudf/cpp/build && \
-    cd /cudf/cpp/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=${CONDA_PREFIX} -DCMAKE_CXX11_ABI=ON -DCMAKE_BUILD_TYPE=Debug && \
-    make -j install
-ADD cudf/.git /cudf/.git
+ADD cudf/build.sh /cudf/build.sh
+WORKDIR /cudf
+RUN source activate ${CONDA_ENV} && bash build.sh libcudf
 ADD cudf/python /cudf/python
+ADD cudf/.git /cudf/.git
 RUN source activate ${CONDA_ENV} && \
     cd /cudf/python && \
     python setup.py build_ext --inplace && \
@@ -122,9 +118,10 @@ RUN source activate ${CONDA_ENV} && python setup.py install
 # cuml
 #FROM CUDF as CUML
 ADD cuml/thirdparty /cuml/thirdparty
-ADD cuml/ml-prims /cuml/ml-prims
-ADD cuml/cuML /cuml/cuML
-WORKDIR /cuml/cuML
+ADD cuml/cpp /cuml/cpp
+ADD cuml/build.sh /cuml/build.sh
+WORKDIR /cuml
+#RUN source activate ${CONDA_ENV} && bash build.sh libcuml
 #RUN source activate ${CONDA_ENV} && \
 #    mkdir build && \
 #    cd build && \
@@ -137,25 +134,22 @@ WORKDIR /cuml/cuML
 #    python setup.py build_ext --inplace && \
 #    python setup.py install && \
 #    python -c "import cuml; print('cuML JIT compiled..')"
-ADD dask-cuml /dask-cuml
-WORKDIR /dask-cuml
+#ADD dask-cuml /dask-cuml
+#WORKDIR /dask-cuml
 #RUN source activate ${CONDA_ENV} && python setup.py install
-ADD cuml/docs /cuml/docs
+#ADD cuml/docs /cuml/docs
 
 # cugraph
-#FROM CUDF as CUGRAPH
-#ADD cugraph/thirdparty /cugraph/thirdparty
-#ADD cugraph/cpp /cugraph/cpp
-#WORKDIR /cugraph/cpp
-#RUN source activate ${CONDA_ENV} && \
-#    mkdir -p /cugraph/cpp/build && \
-#    cd /cugraph/cpp/build && \
-#    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
-#    make -j install
-#ADD cugraph/python /cugraph/python
-#WORKDIR /cugraph/python
-#RUN source activate ${CONDA_ENV} && python setup.py install
-#ADD cugraph/docs /cugraph/docs
+FROM CUDF as CUGRAPH
+ADD cugraph/thirdparty /cugraph/thirdparty
+ADD cugraph/cpp /cugraph/cpp
+ADD cugraph/build.sh /cugraph/build.sh
+WORKDIR /cugraph
+RUN source activate ${CONDA_ENV} && bash build.sh libcugraph
+ADD cugraph/python /cugraph/python
+WORKDIR /cugraph/python
+RUN source activate ${CONDA_ENV} && python setup.py install
+ADD cugraph/docs /cugraph/docs
 
 #FROM CUDF as RAPIDS
 WORKDIR /notebooks
