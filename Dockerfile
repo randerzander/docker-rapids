@@ -1,5 +1,5 @@
 # An integration test & dev container which builds and installs RAPIDS from latest source branches
-ARG CUDA_VERSION=9.2
+ARG CUDA_VERSION=10.0
 ARG LINUX_VERSION=ubuntu18.04
 FROM nvidia/cuda:${CUDA_VERSION}-devel-${LINUX_VERSION} as RAPIDS-BASE
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib
@@ -59,7 +59,7 @@ RUN source activate ${CONDA_ENV} && \
 # custrings
 ADD custrings/LICENSE /custrings/LICENSE
 ADD custrings/cpp /custrings/cpp
-ADD custrings/thirdparty /custrings/thirdparty
+#ADD custrings/thirdparty /custrings/thirdparty
 ENV CMAKE_CXX11_ABI=ON
 RUN source activate ${CONDA_ENV} && \
     mkdir -p /custrings/cpp/build && \
@@ -80,19 +80,20 @@ ADD cudf/thirdparty /cudf/thirdparty
 ADD cudf/cpp /cudf/cpp
 ADD cudf/build.sh /cudf/build.sh
 WORKDIR /cudf
-RUN source activate ${CONDA_ENV} && bash build.sh libcudf
+RUN source activate ${CONDA_ENV} && bash /cudf/build.sh libcudf
 ADD cudf/python /cudf/python
 ADD cudf/.git /cudf/.git
-RUN source activate ${CONDA_ENV} && \
-    cd /cudf/python && \
-    python setup.py build_ext --inplace && \
-    python setup.py install
+WORKDIR /cudf/python/cudf/
+RUN source activate ${CONDA_ENV} && bash /cudf/build.sh cudf
+#RUN source activate ${CONDA_ENV} && \
+#    python setup.py build_ext --inplace && \
+#    python setup.py install
 ADD dask-cuda /dask-cuda
 WORKDIR /dask-cuda
 RUN source activate ${CONDA_ENV} && python setup.py install
-ADD dask-cudf /dask-cudf
-WORKDIR /dask-cudf
-RUN source activate ${CONDA_ENV} && python setup.py install
+WORKDIR /cudf/python/dask_cudf/
+RUN source activate ${CONDA_ENV} && bash /cudf/build.sh dask_cudf
+#RUN source activate ${CONDA_ENV} && python setup.py install
 ADD cudf/docs /cudf/docs
 
 # xgboost
