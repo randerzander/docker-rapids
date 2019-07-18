@@ -6,5 +6,7 @@ dependencies:
 - python-graphviz
 - scikit-learn
 - matplotlib
+- streamz
 - s3fs
 - gcsfs
+- pyspark
