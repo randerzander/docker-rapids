@@ -3,9 +3,6 @@ ARG CUDA_VERSION=10.0
 ARG LINUX_VERSION=ubuntu18.04
 FROM nvidia/cuda:${CUDA_VERSION}-devel-${LINUX_VERSION} as RAPIDS-BASE
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib
-# Needed for cudf.concat(), avoids "OSError: library nvvm not found"
-ENV NUMBAPRO_NVVM=/usr/local/cuda/nvvm/lib64/libnvvm.so
-ENV NUMBAPRO_LIBDEVICE=/usr/local/cuda/nvvm/libdevice/
 # Needed for promptless tzdata install
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -18,7 +15,9 @@ RUN apt update -y --fix-missing && \
       gcc-${CC} \
       g++-${CXX} \
       tzdata \
-      locales
+      locales \
+      openjdk-8-jdk \
+      vim
 
 ADD Miniconda3-latest-Linux-x86_64.sh /miniconda.sh
 RUN sh /miniconda.sh -b -p /conda && /conda/bin/conda update -n base conda

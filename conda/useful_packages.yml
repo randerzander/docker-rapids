@@ -9,3 +9,5 @@ dependencies:
 - matplotlib
 - s3fs
 - gcsfs
+- streamz
+- pyspark

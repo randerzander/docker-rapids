@@ -4,13 +4,14 @@ channels:
 - conda-forge
 - rapidsai
 dependencies:
-- cudatoolkit=9.2
+- cudatoolkit=10.0
 - clangdev
 - cmake>=3.12
 - python>=3.6,<3.8
 - numba>=0.40
 - pandas>=0.23.4
 - pyarrow=0.12.0
+- dlpack
 - boost
 - cffi>=1.10.0   
 - distributed>=1.23.0
