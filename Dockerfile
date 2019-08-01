@@ -128,16 +128,17 @@ WORKDIR /cuml
 #    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
 #    make -j && \
 #    make install
-#ADD cuml/python /cuml/python
-#WORKDIR /cuml/python
+ADD cuml/python /cuml/python
+WORKDIR /cuml/python
+#RUN source activate ${CONDA_ENV} && bash build.sh cuml
 #RUN source activate ${CONDA_ENV} && \
 #    python setup.py build_ext --inplace && \
 #    python setup.py install && \
 #    python -c "import cuml; print('cuML JIT compiled..')"
-#ADD dask-cuml /dask-cuml
+#ADD cuml/python/dask_cuml /dask-cuml
 #WORKDIR /dask-cuml
 #RUN source activate ${CONDA_ENV} && python setup.py install
-#ADD cuml/docs /cuml/docs
+ADD cuml/docs /cuml/docs
 
 # cugraph
 FROM CUDF as CUGRAPH

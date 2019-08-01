@@ -21,11 +21,11 @@ git clone https://github.com/rapidsai/cudf -b $BRANCH
 cd cudf
 git submodule update --init --recursive --remote
 # useful for checking out a specific PR
-#git fetch origin pull/2018/head:groupby
-#git checkout groupby
+#git fetch origin pull/2444/head:remote
+#git checkout remote
 cd ..
 
-git clone https://github.com/rapidsai/cuml -b $BRANCH
+git clone https://github.com/rapidsai/cuml -b $BRANCH --recurse-submodules
 cd cuml
 git submodule update --init --recursive --remote
 cd ..
