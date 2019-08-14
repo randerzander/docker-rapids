@@ -5,7 +5,6 @@ channels:
 - rapidsai
 dependencies:
 - cudatoolkit=10.0
-- clangdev
 - cmake>=3.12
 - python>=3.6,<3.8
 - numba>=0.41,<0.45
@@ -22,6 +21,10 @@ dependencies:
 - cffi>=1.10.0   
 - distributed>=1.23.0
 - cython>=0.29,<0.30
+# cuML
+- clangdev
+- lapack
+- openblas
 - pytest
 # required for building rapids project docs
 - sphinx

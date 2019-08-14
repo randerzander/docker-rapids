@@ -6,6 +6,7 @@ dependencies:
 - bokeh
 - python-graphviz
 - scikit-learn
+- umap-learn
 - matplotlib
 - s3fs
 - gcsfs

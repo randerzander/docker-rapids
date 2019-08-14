@@ -117,28 +117,32 @@ RUN source activate ${CONDA_ENV} && python setup.py install
 
 # cuml
 #FROM CUDF as CUML
-ADD cuml/thirdparty /cuml/thirdparty
-ADD cuml/cpp /cuml/cpp
-ADD cuml/build.sh /cuml/build.sh
+#ADD cuml /cuml
+RUN git clone https://github.com/rapidsai/cuml /cuml --recurse-submodules
+#ADD cuml/thirdparty /cuml/thirdparty
+#ADD cuml/cpp /cuml/cpp
+#ADD cuml/build.sh /cuml/build.sh
+#ADD cuml/.git /cuml/.git
+
+#RUN git clone https://github.com/fmtlib/fmt /fmt
+#WORKDIR /fmt/build
+#RUN source activate ${CONDA_ENV} && cmake .. && make install
+
 WORKDIR /cuml
-#RUN source activate ${CONDA_ENV} && bash build.sh libcuml
+RUN source activate ${CONDA_ENV} && bash build.sh libcuml
 #RUN source activate ${CONDA_ENV} && \
 #    mkdir build && \
 #    cd build && \
 #    cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX && \
 #    make -j && \
 #    make install
-ADD cuml/python /cuml/python
-WORKDIR /cuml/python
-#RUN source activate ${CONDA_ENV} && bash build.sh cuml
+#ADD cuml/python /cuml/python
+RUN source activate ${CONDA_ENV} && bash build.sh cuml
 #RUN source activate ${CONDA_ENV} && \
 #    python setup.py build_ext --inplace && \
 #    python setup.py install && \
 #    python -c "import cuml; print('cuML JIT compiled..')"
-#ADD cuml/python/dask_cuml /dask-cuml
-#WORKDIR /dask-cuml
-#RUN source activate ${CONDA_ENV} && python setup.py install
-ADD cuml/docs /cuml/docs
+#ADD cuml/docs /cuml/docs
 
 # cugraph
 FROM CUDF as CUGRAPH
@@ -146,10 +150,10 @@ ADD cugraph/thirdparty /cugraph/thirdparty
 ADD cugraph/cpp /cugraph/cpp
 ADD cugraph/build.sh /cugraph/build.sh
 WORKDIR /cugraph
-RUN source activate ${CONDA_ENV} && bash build.sh libcugraph
+#RUN source activate ${CONDA_ENV} && bash build.sh libcugraph
 ADD cugraph/python /cugraph/python
 WORKDIR /cugraph/python
-RUN source activate ${CONDA_ENV} && python setup.py install
+#RUN source activate ${CONDA_ENV} && python setup.py install
 ADD cugraph/docs /cugraph/docs
 
 #FROM CUDF as RAPIDS
