@@ -8,7 +8,7 @@ rm -rf cu*
 rm -rf dask*
 rm -rf xgboost
 
-BRANCH=branch-0.9
+BRANCH=branch-0.10
 
 git clone --recurse-submodules https://github.com/rapidsai/rmm -b ${BRANCH}
 
@@ -21,7 +21,7 @@ git clone https://github.com/rapidsai/cudf -b $BRANCH
 cd cudf
 git submodule update --init --recursive --remote
 # useful for checking out a specific PR
-#git fetch origin pull/2444/head:remote
+#git fetch origin pull/2629/head:remote
 #git checkout remote
 cd ..
 

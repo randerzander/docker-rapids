@@ -25,6 +25,9 @@ dependencies:
 - clangdev
 - lapack
 - openblas
+- dask-ml
+- libcumlprims=0.9*
+- nccl>=2.4
 - pytest
 # required for building rapids project docs
 - sphinx
