@@ -23,6 +23,8 @@ dependencies:
 - cython>=0.29,<0.30
 # cuML
 - clangdev
+#- clang-format=0.8.0
+- rapidsai::clang
 - lapack
 - openblas
 - dask-ml
