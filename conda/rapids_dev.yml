@@ -6,11 +6,15 @@ channels:
   - conda-forge
 dependencies:
   - cudatoolkit=10.0
-  - dask-cuda=>0.9
-  - cudf=>0.9
-  - dask-cudf=>0.9
-  - cuml=>0.9
-  - dask-cuml=>0.9
-  - cugraph=>0.9
-  - rapidsai/label/xgboost::xgboost=>0.8
-  - rapidsai/label/xgboost::dask-xgboost=>0.2
+  - dask-cuda
+  - cudf=>0.10
+  - dask-cudf
+  - cuml
+  - cugraph
+  - rapidsai::cupy
+  - pip:
+    # https://xgboost-ci.net/blue/organizations/jenkins/xgboost/activity
+    # See latest build of master, select "Artifacts" tab to get wheel URL
+    - https://xgboost-ci.net/job/xgboost/job/master/344/artifact/python-package/dist/xgboost-1.0.0_SNAPSHOT-py2.py3-none-any.whl
+  #- rapidsai/label/xgboost::xgboost=>0.8
+  #- rapidsai/label/xgboost::dask-xgboost=>0.2
