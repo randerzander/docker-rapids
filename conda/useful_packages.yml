@@ -8,6 +8,7 @@ dependencies:
 - scikit-learn
 - umap-learn
 - matplotlib
+- ipywidgets
 - s3fs
 - gcsfs
 - streamz

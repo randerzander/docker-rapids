@@ -7,7 +7,7 @@ dependencies:
 - cudatoolkit=10.0
 - cmake>=3.12
 - python>=3.6,<3.8
-- numba>=0.41,<0.45
+- numba>=0.45.1
 - pandas>=0.24.2,<0.25
 - pyarrow=0.14.1
 - arrow-cpp=0.14.1
@@ -30,6 +30,7 @@ dependencies:
 - dask-ml
 - libcumlprims=0.9*
 - nccl>=2.4
+- rapidsai::cupy
 - pytest
 # required for building rapids project docs
 - sphinx
