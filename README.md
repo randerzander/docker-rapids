@@ -2,7 +2,7 @@ This repo uses setup.sh to clone and setup local copies of RAPIDS repositories.
 
 A Dockerfile mounts the relevant source folders from each repo into the container at runtime as a volume.
 
-CMD is setup to run [build.sh] and launch Jupyter.
+CMD is setup to run [build.sh](build.sh) and launch Jupyter.
 
 Usage:
 ```bash
@@ -21,6 +21,7 @@ docker run -p 8888:8888 -p 8787:8787 -p 8000:8000 \
 
 # above run command is provided as a bash script: sudo sh run.sh
 ```
-*Note*: RAPIDS projects take a long time to build. If cudf's c++ code changes, everything that depends on it needs to be rebuilt (XGBoost, cuML, and cuGraph).
 
-To speed things up, you can easily comment out build/install commands for packages you don't care about testing in [build.sh].
+RAPIDS projects take time to build. If cudf's c++ code changes, everything that depends on it needs to be rebuilt (XGBoost, cuML, and cuGraph).
+
+To speed things up, you can easily comment out build/install commands for packages you don't care about testing in [build.sh](build.sh).
