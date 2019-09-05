@@ -34,10 +34,10 @@ cd /rapids/dask-xgboost
 python setup.py install
 
 cd /rapids
-#rm -rf cuml
-#git clone https://github.com/rapidsai/cuml --recurse-submodules
+rm -rf cuml
+git clone https://github.com/rapidsai/cuml --recurse-submodules
 cd /rapids/cuml
-#git submodule update --init --recursive --remote
+git submodule update --init --recursive --remote
 bash build.sh libcuml cuml
 
 cd /rapids/cugraph
