@@ -11,7 +11,10 @@ dependencies:
   - dask-cudf
   - cuml
   - cugraph
+  - custreamz
+  - cuspatial
   - rapidsai::cupy
+  - pip
   - pip:
     # https://xgboost-ci.net/blue/organizations/jenkins/xgboost/activity
     - https://xgboost-ci.net/job/xgboost/job/master/lastSuccessfulBuild/artifact/python-package/dist/xgboost-1.0.0_SNAPSHOT-py2.py3-none-any.whl
