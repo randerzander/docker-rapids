@@ -1,8 +1,9 @@
 name: rapids_dev
 channels:
-- nvidia
 - conda-forge
 - rapidsai
+- rapidsai-nightly
+- nvidia
 dependencies:
 - cudatoolkit=10.0
 - cmake>=3.12
@@ -28,10 +29,13 @@ dependencies:
 - lapack
 - openblas
 - dask-ml
-- libcumlprims=0.9*
+- libcumlprims=0.11
 - nccl>=2.4
 - rapidsai::cupy
+# cuGraph
+- libcypher-parser
 - pytest
+- pynvml
 # required for building rapids project docs
 - sphinx
 - sphinx_rtd_theme
@@ -41,6 +45,10 @@ dependencies:
 - ipython
 - recommonmark
 - pandoc=<2.0.0
+# ucx
+- ucx-proc=*=gpu
+- jakirkham/label/ucx-new::ucx
+- jakirkham/label/ucx-new::ucx-py
 - pip
 - pip:
   - sphinx-markdown-tables

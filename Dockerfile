@@ -1,5 +1,5 @@
 # An integration test & dev container which builds and installs RAPIDS from latest source branches
-ARG CUDA_VERSION=10.0
+ARG CUDA_VERSION=10.1
 ARG LINUX_VERSION=ubuntu18.04
 FROM nvidia/cuda:${CUDA_VERSION}-devel-${LINUX_VERSION}
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/lib
@@ -14,13 +14,14 @@ RUN apt update -y --fix-missing && \
       git \
       gcc-${CC} \
       g++-${CXX} \
+      libnuma-dev \
       tzdata \
       locales \
       openjdk-8-jdk \
       vim
 
 ADD Miniconda3-latest-Linux-x86_64.sh /miniconda.sh
-RUN sh /miniconda.sh -b -p /conda && /conda/bin/conda update -n base conda
+RUN sh /miniconda.sh -b -p /conda
 ENV PATH=${PATH}:/conda/bin
 # Enables "source activate conda"
 SHELL ["/bin/bash", "-c"]
@@ -42,6 +43,13 @@ ENV LC_ALL en_US.UTF-8
 ENV CC=/usr/bin/gcc-${CC}
 ENV CXX=/usr/bin/g++-${CXX}
 ENV CMAKE_CXX11_ABI=ON
+
+# ucx env var for plain TCP, no nvlink
+ENV UCX_TLS=tcp,sockcm
+# ucx env var for nvlink
+#ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
+ENV UCX_SOCKADDR_TLS_PRIORITY=sockcm
+ENV UCXPY_IFNAME="eth0"
 
 WORKDIR /notebooks
 CMD source activate ${CONDA_ENV} && bash /rapids/build.sh && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token=''
