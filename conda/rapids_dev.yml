@@ -5,13 +5,13 @@ channels:
 - rapidsai-nightly
 - nvidia
 dependencies:
-- cudatoolkit=10.0
+- cudatoolkit=10.1
 - cmake>=3.12
 - python>=3.6,<3.8
 - numba>=0.45.1
 - pandas>=0.24.2,<0.25
-- pyarrow=0.14.1
-- arrow-cpp=0.14.1
+- pyarrow=0.15
+- arrow-cpp=0.15
 - fastavro>=0.22.0
 - dlpack
 - boost
