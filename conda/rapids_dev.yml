@@ -1,5 +1,4 @@
 channels:
-  - rapidsai-nightly/label/xgboost
   - rapidsai-nightly
   - rapidsai
   - nvidia
@@ -7,18 +6,21 @@ channels:
 dependencies:
   - cudatoolkit=10.1
   - dask-cuda
-  - cudf=0.10
+  - cudf=0.11
+  - dask
   - dask-cudf
   - cuml
   - cugraph
   - custreamz
   - cuspatial
   - rapidsai::cupy
-  - rapidsai-nightly/label/xgboost::dask-xgboost
-  - rapidsai-nightly/label/xgboost::xgboost=1.0.0.SNAPSHOT
+  - rapidsai-nightly::dask-xgboost
+  - rapidsai-nightly::xgboost=1.0.0.SNAPSHOT
   - ucx-proc=*=gpu
   - jakirkham/label/ucx-new::ucx
   - jakirkham/label/ucx-new::ucx-py
-  #- pip
-  #- pip:
+  - pip
+  - pip:
+     - "--editable=git+https://github.com/dask/dask.git"
+     - "--editable=git+https://github.com/dask/distributed.git"
   #  - https://xgboost-ci.net/job/xgboost/job/master/lastSuccessfulBuild/artifact/python-package/dist/xgboost-1.0.0_SNAPSHOT-py2.py3-none-any.whl
