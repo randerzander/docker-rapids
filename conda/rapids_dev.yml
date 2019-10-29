@@ -21,6 +21,6 @@ dependencies:
   - jakirkham/label/ucx-new::ucx-py
   - pip
   - pip:
-     - "--editable=git+https://github.com/dask/dask.git"
-     - "--editable=git+https://github.com/dask/distributed.git"
+     - git+https://github.com/dask/dask.git@master
+     - git+https://github.com/dask/distributed.git@master
   #  - https://xgboost-ci.net/job/xgboost/job/master/lastSuccessfulBuild/artifact/python-package/dist/xgboost-1.0.0_SNAPSHOT-py2.py3-none-any.whl

@@ -11,7 +11,8 @@ RUN apt update -y --fix-missing && \
       apt install -y \
       tzdata \
       locales \
-      vim
+      vim \
+      git
 
 # Install conda
 ADD https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh /miniconda.sh
