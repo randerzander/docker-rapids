@@ -1,6 +1,7 @@
 channels:
 - conda-forge
 dependencies:
+- python=3.7
 - jupyterlab
 - bokeh
 - python-graphviz
@@ -9,3 +10,4 @@ dependencies:
 - s3fs
 - gcsfs
 - pyspark
+- openjdk=8.0
