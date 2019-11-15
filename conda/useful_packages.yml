@@ -13,3 +13,4 @@ dependencies:
 - gcsfs
 - streamz
 - pyspark
+- openjdk=8

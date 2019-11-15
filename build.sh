@@ -37,19 +37,17 @@ cd /rapids/cuml
 bash build.sh libcuml cuml
 
 cd /rapids/cugraph
-# https://github.com/rapidsai/cugraph/issues/566
-#bash build.sh libcugraph cugraph
+bash build.sh libcugraph cugraph
 
 export CUDF_HOME=/rapids/cudf
 export CUSPATIAL_HOME=/rapids/cuspatial
 mkdir -p /rapids/cuspatial/cpp/build
 cd /rapids/cuspatial/cpp/build
 cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
-# https://github.com/rapidsai/cuspatial/issues/85
-#make install
-#cd /rapids/cuspatial/python/cuspatial
-#python setup.py build_ext --inplace
-#python setup.py install
+make install
+cd /rapids/cuspatial/python/cuspatial
+python setup.py build_ext --inplace
+python setup.py install
 
 cd /rapids/cudatashader
 python setup.py install

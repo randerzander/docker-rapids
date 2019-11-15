@@ -36,6 +36,8 @@ dependencies:
 - libcypher-parser
 - pytest
 - pynvml
+# cuSpatial
+- gdal=2.4
 # required for building rapids project docs
 - sphinx
 - sphinx_rtd_theme
@@ -51,5 +53,7 @@ dependencies:
 - jakirkham/label/ucx-new::ucx-py
 - pip
 - pip:
+  - git+git://github.com/dask/dask.git@master
+  - git+git://github.com/dask/distributed.git@master
   - sphinx-markdown-tables
   - cmake_setuptools

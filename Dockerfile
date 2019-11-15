@@ -17,7 +17,6 @@ RUN apt update -y --fix-missing && \
       libnuma-dev \
       tzdata \
       locales \
-      openjdk-8-jdk \
       vim
 
 ADD Miniconda3-latest-Linux-x86_64.sh /miniconda.sh
