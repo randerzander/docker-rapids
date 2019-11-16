@@ -12,3 +12,7 @@ dependencies:
 - gcsfs
 - pyspark
 - openjdk=8.0
+- psutil
+- pip
+- pip:
+  - jupyterlab-nvdashboard

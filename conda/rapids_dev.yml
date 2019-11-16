@@ -7,7 +7,6 @@ dependencies:
   - cudatoolkit=10.1
   - dask-cuda
   - cudf=0.11
-  - dask
   - dask-cudf
   - cuml
   - cugraph
@@ -17,10 +16,9 @@ dependencies:
   - rapidsai-nightly::dask-xgboost
   - rapidsai-nightly::xgboost=1.0.0.SNAPSHOT
   - ucx-proc=*=gpu
-  - jakirkham/label/ucx-new::ucx
-  - jakirkham/label/ucx-new::ucx-py
+  - conda-forge/label/rc_ucx::ucx
+  - conda-forge/label/rc_ucx::ucx-py
   - pip
   - pip:
      - git+https://github.com/dask/dask.git@master
      - git+https://github.com/dask/distributed.git@master
-  #  - https://xgboost-ci.net/job/xgboost/job/master/lastSuccessfulBuild/artifact/python-package/dist/xgboost-1.0.0_SNAPSHOT-py2.py3-none-any.whl
