@@ -37,7 +37,6 @@ cd /rapids/cuml
 #bash build.sh libcuml cuml
 
 cd /rapids/cugraph
-# https://github.com/rapidsai/cugraph/issues/566
 bash build.sh libcugraph cugraph
 
 export CUDF_HOME=/rapids/cudf

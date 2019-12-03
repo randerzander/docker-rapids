@@ -54,6 +54,8 @@ dependencies:
 #- conda-forge/label/rc_ucx::ucx-py
 - pip
 - pip:
+  - git+git://github.com/dask/dask.git@master
+  - git+git://github.com/dask/distributed.git@master
   - sphinx-markdown-tables
   - cmake_setuptools
   - git+https://github.com/dask/dask.git
