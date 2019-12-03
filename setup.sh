@@ -18,7 +18,7 @@ git clone https://github.com/rapidsai/cudf -b $BRANCH
 cd cudf
 git submodule update --init --recursive --remote
 # useful for checking out a specific PR
-#git fetch origin pull/2629/head:remote
+#git fetch origin pull/3407/head:remote
 #git checkout remote
 cd ..
 

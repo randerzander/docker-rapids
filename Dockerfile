@@ -17,7 +17,6 @@ RUN apt update -y --fix-missing && \
       libnuma-dev \
       tzdata \
       locales \
-      openjdk-8-jdk \
       vim
 
 ADD Miniconda3-latest-Linux-x86_64.sh /miniconda.sh
@@ -34,6 +33,9 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/${CONDA_ENV}/lib
 
 RUN source activate ${CONDA_ENV} && conda env update --name ${CONDA_ENV} -f=/rapids/conda/environments/useful_packages.yml
 
+RUN source activate ${CONDA_ENV} && jupyter labextension install dask-labextension
+RUN source activate ${CONDA_ENV} && jupyter labextension install jupyterlab-nvdashboard
+
 ENV PYNI_PATH=/conda/envs/${CONDA_ENV}
 ENV PYTHON_VERSION=3.7
 RUN locale-gen en_US.UTF-8
@@ -45,11 +47,12 @@ ENV CXX=/usr/bin/g++-${CXX}
 ENV CMAKE_CXX11_ABI=ON
 
 # ucx env var for plain TCP, no nvlink
-ENV UCX_TLS=tcp,sockcm
+#ENV UCX_TLS=tcp,sockcm
 # ucx env var for nvlink
-#ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
+ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
 ENV UCX_SOCKADDR_TLS_PRIORITY=sockcm
-ENV UCXPY_IFNAME="eth0"
+ENV UCXPY_IFNAME="enp1s0f0"
+ENV UCX_CUDA_IPC_CACHE=n
 
-WORKDIR /notebooks
-CMD source activate ${CONDA_ENV} && bash /rapids/build.sh && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token=''
+WORKDIR /
+CMD source activate ${CONDA_ENV} && bash /rapids/build.sh && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token='' --NotebookApp.notebook_dir='/notebooks'

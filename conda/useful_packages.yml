@@ -4,6 +4,7 @@ channels:
 dependencies:
 - jupyterlab
 - bokeh
+- nodejs
 - python-graphviz
 - scikit-learn
 - umap-learn
@@ -13,3 +14,10 @@ dependencies:
 - gcsfs
 - streamz
 - pyspark
+- openjdk=8.0
+- maven
+- psutil
+- pip
+- pip:
+  - dask_labextension
+  - jupyterlab-nvdashboard
