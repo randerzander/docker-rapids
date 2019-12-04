@@ -12,13 +12,12 @@ dependencies:
   - cugraph
   - custreamz
   - cuspatial
-  - rapidsai::cupy
   - rapidsai-nightly::dask-xgboost
   - rapidsai-nightly::xgboost=1.0.0.SNAPSHOT
+  - ucx-py
+  - ucx
   - ucx-proc=*=gpu
-  - conda-forge/label/rc_ucx::ucx
-  - conda-forge/label/rc_ucx::ucx-py
   - pip
   - pip:
-     - git+https://github.com/dask/dask.git@master
-     - git+https://github.com/dask/distributed.git@master
+    - git+https://github.com/dask/dask.git
+    - git+https://github.com/dask/distributed.git

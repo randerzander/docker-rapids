@@ -27,17 +27,19 @@ ENV CONDA_ENV=rapids
 # useful user-level customizations
 ADD /conda/useful_packages.yml /conda/environments/useful_packages.yml
 RUN conda env create --name ${CONDA_ENV} -f /conda/environments/useful_packages.yml
+RUN source activate ${CONDA_ENV} && jupyter labextension install dask-labextension
+RUN source activate ${CONDA_ENV} && jupyter labextension install jupyterlab-nvdashboard
 
 # install RAPIDS packages
 ADD /conda/rapids_dev.yml /conda/environments/rapids_dev.yml
 RUN source activate ${CONDA_ENV} && conda env update -f /conda/environments/rapids_dev.yml
 
 # ucx env var for plain TCP, no nvlink
-ENV UCX_TLS=tcp,sockcm
+#ENV UCX_TLS=tcp,sockcm
 # ucx env var for nvlink
-#ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
+ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
 ENV UCX_SOCKADDR_TLS_PRIORITY=sockcm
-ENV UCXPY_IFNAME="eth0"
+ENV UCXPY_IFNAME="enp1s0f0"
 
-WORKDIR /notebooks
-CMD source activate ${CONDA_ENV} && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token=''
+CMD source activate ${CONDA_ENV} && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token='' --NotebookApp.notebook_dir='/notebooks'
+
