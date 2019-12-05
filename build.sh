@@ -51,3 +51,15 @@ python setup.py install
 
 cd /rapids/cudatashader
 python setup.py install
+
+export CUDA_HOME=/usr/local/cuda
+cd /rapids/ucx
+./autogen.sh
+mkdir -p build
+cd build
+../configure --prefix=$CONDA_PREFIX --enable-debug --with-cuda=$CUDA_HOME --enable-mt CPPFLAGS="-I//$CUDA_HOME/include"
+make -j install
+
+cd /rapids/ucx-py
+python setup.py build_ext --inplace
+python -m pip install -e .

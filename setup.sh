@@ -7,8 +7,10 @@ rm -rf rmm
 rm -rf cu*
 rm -rf dask-*
 rm -rf xgboost
+rm -rf ucx*
 
 BRANCH=branch-0.11
+UCX_BRANCH=v1.7.x
 
 git clone --recurse-submodules https://github.com/rapidsai/rmm -b ${BRANCH}
 
@@ -46,5 +48,8 @@ cd ..
 git clone --recurse-submodules https://github.com/rapidsai/cuspatial -b ${BRANCH}
 
 git clone --recurse-submodules https://github.com/rapidsai/cuDataShader cudatashader
-
 cd ..
+
+# ucx
+git clone https://github.com/openucx/ucx -b ${UCX_BRANCH}
+git clone https://github.com/rapidsai/ucx-py

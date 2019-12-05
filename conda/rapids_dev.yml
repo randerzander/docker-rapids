@@ -38,6 +38,19 @@ dependencies:
 - pynvml
 # cuSpatial
 - gdal=2.4
+# ucx
+- automake
+- make
+- libhwloc
+- libtool
+- pkg-config
+- pytest-asyncio
+- setuptools
+# if you prefer to install UCX from conda instead of building
+#- ucx-py
+#- ucx-proc=*=gpu
+#- conda-forge/label/rc_ucx::ucx
+#- conda-forge/label/rc_ucx::ucx-py
 # required for building rapids project docs
 - sphinx
 - sphinx_rtd_theme
@@ -47,11 +60,6 @@ dependencies:
 - ipython
 - recommonmark
 - pandoc=<2.0.0
-# ucx
-- ucx-py
-#- ucx-proc=*=gpu
-#- conda-forge/label/rc_ucx::ucx
-#- conda-forge/label/rc_ucx::ucx-py
 - pip
 - pip:
   - git+git://github.com/dask/dask.git@master
