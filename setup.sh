@@ -7,9 +7,10 @@ rm -rf rmm
 rm -rf cu*
 rm -rf dask-*
 rm -rf xgboost
-rm -rf ucx*
+rm -rf ucx
+rm -rf ucx-py
 
-BRANCH=branch-0.11
+BRANCH=branch-0.12
 UCX_BRANCH=v1.7.x
 
 git clone --recurse-submodules https://github.com/rapidsai/rmm -b ${BRANCH}
@@ -20,8 +21,8 @@ git clone https://github.com/rapidsai/cudf -b $BRANCH
 cd cudf
 git submodule update --init --recursive --remote
 # useful for checking out a specific PR
-#git fetch origin pull/3407/head:remote
-#git checkout remote
+git fetch origin pull/3502/head:remote
+git checkout remote
 cd ..
 
 # cuML is cloned by build.sh
@@ -32,7 +33,7 @@ cd cugraph
 git submodule update --init --recursive --remote
 cd ..
 
-git clone --recurse-submodules https://github.com/rapidsai/dask-cuda
+git clone --recurse-submodules https://github.com/rapidsai/dask-cuda -b ${BRANCH}
 
 # should now use xgboost.dask
 git clone --recurse-submodules https://github.com/rapidsai/dask-xgboost -b dask-cudf
@@ -48,8 +49,7 @@ cd ..
 git clone --recurse-submodules https://github.com/rapidsai/cuspatial -b ${BRANCH}
 
 git clone --recurse-submodules https://github.com/rapidsai/cuDataShader cudatashader
-cd ..
 
 # ucx
 git clone https://github.com/openucx/ucx -b ${UCX_BRANCH}
-git clone https://github.com/rapidsai/ucx-py
+git clone https://github.com/rapidsai/ucx-py -b ${BRANCH}

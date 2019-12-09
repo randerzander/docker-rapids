@@ -16,6 +16,7 @@ RUN apt update -y --fix-missing && \
       g++-${CXX} \
       libnuma-dev \
       tzdata \
+      librdmacm-dev libnuma-dev libibverbs-dev \
       locales \
       vim
 
@@ -54,5 +55,4 @@ ENV UCX_SOCKADDR_TLS_PRIORITY=sockcm
 ENV UCXPY_IFNAME="enp1s0f0"
 ENV UCX_CUDA_IPC_CACHE=n
 
-WORKDIR /
 CMD source activate ${CONDA_ENV} && bash /rapids/build.sh && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token='' --NotebookApp.notebook_dir='/notebooks'
