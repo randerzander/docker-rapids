@@ -21,8 +21,8 @@ git clone https://github.com/rapidsai/cudf -b $BRANCH
 cd cudf
 git submodule update --init --recursive --remote
 # useful for checking out a specific PR
-git fetch origin pull/3502/head:remote
-git checkout remote
+#git fetch origin pull/3563/head:remote
+#git checkout remote
 cd ..
 
 # cuML is cloned by build.sh

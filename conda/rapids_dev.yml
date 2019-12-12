@@ -29,9 +29,9 @@ dependencies:
 - lapack
 - openblas
 - dask-ml
-- libcumlprims=0.11
+- libcumlprims=0.12
 - nccl>=2.4
-- rapidsai::cupy
+- cupy
 # cuGraph
 - libcypher-parser
 - pytest
