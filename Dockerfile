@@ -12,6 +12,7 @@ RUN apt update -y --fix-missing && \
       tzdata \
       locales \
       vim \
+      libnuma-dev libibverbs-dev librdmacm-dev \
       git
 
 # Install conda
@@ -37,9 +38,8 @@ RUN source activate ${CONDA_ENV} && conda env update -f /conda/environments/rapi
 # ucx env var for plain TCP, no nvlink
 #ENV UCX_TLS=tcp,sockcm
 # ucx env var for nvlink
-ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
-ENV UCX_SOCKADDR_TLS_PRIORITY=sockcm
-ENV UCXPY_IFNAME="enp1s0f0"
+#ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
+#ENV UCX_SOCKADDR_TLS_PRIORITY=sockcm
+#ENV UCXPY_IFNAME="enp1s0f0"
 
 CMD source activate ${CONDA_ENV} && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token='' --NotebookApp.notebook_dir='/notebooks'
-

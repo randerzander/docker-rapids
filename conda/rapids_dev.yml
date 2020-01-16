@@ -1,22 +1,21 @@
 channels:
   - rapidsai-nightly
-  - rapidsai
   - nvidia
   - conda-forge
 dependencies:
   - cudatoolkit=10.1
+  - cudf=0.12
   - dask-cuda
-  - cudf=0.11
   - dask-cudf
   - cuml
   - cugraph
   - custreamz
   - cuspatial
   - rapidsai-nightly::dask-xgboost
-  - rapidsai-nightly::xgboost=1.0.0.SNAPSHOT
-  - ucx-py
-  - ucx
+  - rapidsai-nightly::rapids-xgboost
   - ucx-proc=*=gpu
+  - ucx
+  - ucx-py
   - pip
   - pip:
     - git+https://github.com/dask/dask.git
