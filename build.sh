@@ -50,17 +50,19 @@ cd /rapids/cuml
 bash build.sh libcuml cuml
 
 cd /rapids/cugraph
-bash build.sh libcugraph cugraph
+# broken after libcudf++ refactor
+#bash build.sh libcugraph cugraph
 
 export CUDF_HOME=/rapids/cudf
 export CUSPATIAL_HOME=/rapids/cuspatial
 mkdir -p /rapids/cuspatial/cpp/build
 cd /rapids/cuspatial/cpp/build
 cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
-make install
+# broken after libcudf++ refactor
+#make install
 cd /rapids/cuspatial/python/cuspatial
-python setup.py build_ext --inplace
-python setup.py install
+#python setup.py build_ext --inplace
+#python setup.py install
 
 cd /rapids/cudatashader
 python setup.py install

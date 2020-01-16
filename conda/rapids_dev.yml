@@ -10,8 +10,8 @@ dependencies:
 - python>=3.6,<3.8
 - numba>=0.45.1
 - pandas>=0.24.2,<0.25
-- pyarrow=0.15
-- arrow-cpp=0.15
+- pyarrow=0.15.0
+- arrow-cpp=0.15.0
 - fastavro>=0.22.0
 - dlpack
 - boost
@@ -31,7 +31,7 @@ dependencies:
 - dask-ml
 - libcumlprims=0.12
 - nccl>=2.4
-- cupy
+- cupy>=6.6.0,<8.0.0a0
 # cuGraph
 - libcypher-parser
 - pytest
