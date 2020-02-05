@@ -2,21 +2,12 @@ channels:
   - rapidsai-nightly
   - nvidia
   - conda-forge
+  - blazingsql-nightly/label/cuda10.0
+  - blazingsql-nightly
+  - defaults
 dependencies:
-  - cudatoolkit=10.1
-  - cudf=0.12
-  - dask-cuda
-  - dask-cudf
-  - cuml
-  - cugraph
-  - custreamz
-  - cuspatial
-  - rapidsai-nightly::dask-xgboost
-  - rapidsai-nightly::rapids-xgboost
-  - ucx-proc=*=gpu
-  - ucx
-  - ucx-py
-  - pip
-  - pip:
-    - git+https://github.com/dask/dask.git
-    - git+https://github.com/dask/distributed.git
+  - python=3.7
+# blazingsql only has 10.0 builds
+  - cudatoolkit=10.0
+  - rapids=0.13
+  - blazingsql=0.13

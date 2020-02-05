@@ -13,7 +13,6 @@ dependencies:
 - ipywidgets
 - s3fs
 - gcsfs
-- streamz
 - pyspark
 - openjdk=8.0
 - maven
