@@ -4,12 +4,14 @@ channels:
 - rapidsai
 - rapidsai-nightly
 - nvidia
+- blazingsql-nightly
+- blazingsql-nightly/label/cuda10.0
 dependencies:
-- cudatoolkit=10.1
+- cudatoolkit=10.0
 - cmake>=3.12
 - python>=3.6,<3.8
 - numba>=0.45.1
-- pandas>=0.24.2,<0.25
+- pandas>=0.25
 - pyarrow=0.15.0
 - arrow-cpp=0.15.0
 - fastavro>=0.22.0
@@ -29,9 +31,9 @@ dependencies:
 - lapack
 - openblas
 - dask-ml
-- libcumlprims=0.12
+- libcumlprims=0.13
 - nccl>=2.4
-- cupy>=6.6.0,<8.0.0a0
+- cupy>=6.6.0,<8.0.0a0,!=7.1.0
 # cuGraph
 - libcypher-parser
 - pytest
@@ -46,6 +48,15 @@ dependencies:
 - pkg-config
 - pytest-asyncio
 - setuptools
+# blazingsql
+- gtest
+- gmock
+- rapidjson
+- cppzmq
+- jpype1
+- netifaces
+- pyhive
+- bsql-toolchain
 # if you prefer to install UCX from conda instead of building
 #- ucx-py
 #- ucx-proc=*=gpu

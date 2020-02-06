@@ -18,7 +18,8 @@ RUN apt update -y --fix-missing && \
       tzdata \
       librdmacm-dev libnuma-dev libibverbs-dev \
       locales \
-      vim
+      vim \
+      iputils-ping traceroute
 
 ADD Miniconda3-latest-Linux-x86_64.sh /miniconda.sh
 RUN sh /miniconda.sh -b -p /conda
@@ -50,9 +51,14 @@ ENV CMAKE_CXX11_ABI=ON
 # ucx env var for plain TCP, no nvlink
 #ENV UCX_TLS=tcp,sockcm
 # ucx env var for nvlink
-ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
-ENV UCX_SOCKADDR_TLS_PRIORITY=sockcm
-ENV UCXPY_IFNAME="enp1s0f0"
-ENV UCX_CUDA_IPC_CACHE=n
+#ENV UCX_TLS=tcp,sockcm,cuda_copy,cuda_ipc
+#ENV UCX_SOCKADDR_TLS_PRIORITY=sockcm
+#ENV UCXPY_IFNAME="enp1s0f0"
+#ENV UCX_CUDA_IPC_CACHE=n
 
+# for building compiled image
+#ADD repos /rapids
+#ADD build.sh /rapids/build.sh
+#RUN source activate ${CONDA_ENV} && bash /rapids/build.sh
+# for building at runtime from locally mounted clones
 CMD source activate ${CONDA_ENV} && bash /rapids/build.sh && jupyter-lab --allow-root --ip='0.0.0.0' --NotebookApp.token='' --NotebookApp.notebook_dir='/notebooks'
