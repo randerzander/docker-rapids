@@ -2,12 +2,10 @@ channels:
   - rapidsai-nightly
   - nvidia
   - conda-forge
-  - blazingsql-nightly/label/cuda10.0
   - blazingsql-nightly
   - defaults
 dependencies:
   - python=3.7
-# blazingsql only has 10.0 builds
-  - cudatoolkit=10.0
+  - cudatoolkit=10.1
   - rapids=0.13
   - blazingsql=0.13
