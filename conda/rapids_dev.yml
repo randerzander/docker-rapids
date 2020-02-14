@@ -5,9 +5,8 @@ channels:
 - rapidsai-nightly
 - nvidia
 - blazingsql-nightly
-- blazingsql-nightly/label/cuda10.0
 dependencies:
-- cudatoolkit=10.0
+- cudatoolkit=10.1
 - cmake>=3.12
 - python>=3.6,<3.8
 - numba>=0.45.1
@@ -48,6 +47,7 @@ dependencies:
 - pkg-config
 - pytest-asyncio
 - setuptools
+- cmake_setuptools
 # blazingsql
 - gtest
 - gmock
@@ -57,11 +57,9 @@ dependencies:
 - netifaces
 - pyhive
 - bsql-toolchain
-# if you prefer to install UCX from conda instead of building
-#- ucx-py
-#- ucx-proc=*=gpu
-#- conda-forge/label/rc_ucx::ucx
-#- conda-forge/label/rc_ucx::ucx-py
+# for building conda installable packages
+- conda-build
+- conda-pack
 # required for building rapids project docs
 - sphinx
 - sphinx_rtd_theme
@@ -73,10 +71,5 @@ dependencies:
 - pandoc=<2.0.0
 - pip
 - pip:
-  - git+git://github.com/dask/dask.git@master
-  - git+git://github.com/dask/distributed.git@master
   - sphinx-markdown-tables
-  - cmake_setuptools
-  - git+https://github.com/dask/dask.git
-  - git+https://github.com/dask/distributed.git
   - git+https://github.com/python-streamz/streamz.git

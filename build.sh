@@ -46,25 +46,34 @@ make -j install
 
 cd $REPO_DIR/ucx-py
 python setup.py build_ext --inplace
-python -m pip install -e .
+#python -m pip install -e .
+python setup.py install
 
 cd $REPO_DIR/cuml
 bash build.sh libcuml cuml
 
 cd $REPO_DIR/cugraph
-# broken after libcudf++ refactor
 bash build.sh libcugraph cugraph
 
-export CUDF_HOME=/rapids/cudf
-export CUSPATIAL_HOME=/rapids/cuspatial
+export CUDF_HOME=$REPO_DIR/cudf
+export CUSPATIAL_HOME=$REPO_DIR/cuspatial
 mkdir -p $REPO_DIR/cuspatial/cpp/build
 cd $REPO_DIR/cuspatial/cpp/build
-#cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
-# broken after libcudf++ refactor
-#make install
+cmake .. -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
+make install
 cd $REPO_DIR/cuspatial/python/cuspatial
-#python setup.py build_ext --inplace
-#python setup.py install
+python setup.py build_ext --inplace
+python setup.py install
 
 cd $REPO_DIR/cudatashader
+python setup.py install
+
+cd $REPO_DIR/blazingsql
+bash conda/recipes/blazingsql/build.sh
+cd pyblazing
+python setup.py install
+
+cd $REPO_DIR/dask
+python setup.py install
+cd $REPO_DIR/distributed
 python setup.py install

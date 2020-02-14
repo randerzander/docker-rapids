@@ -34,7 +34,6 @@ RUN conda env create --name ${CONDA_ENV} --file /rapids/conda/environments/rapid
 ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/${CONDA_ENV}/lib
 
 RUN source activate ${CONDA_ENV} && conda env update --name ${CONDA_ENV} -f=/rapids/conda/environments/useful_packages.yml
-
 RUN source activate ${CONDA_ENV} && jupyter labextension install dask-labextension
 RUN source activate ${CONDA_ENV} && jupyter labextension install jupyterlab-nvdashboard
 

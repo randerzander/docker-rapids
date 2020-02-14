@@ -5,6 +5,7 @@ fi
 # cleanup previous clones
 rm -rf rmm
 rm -rf cu*
+rm -rf dask*
 rm -rf dask-*
 rm -rf xgboost
 rm -rf ucx
@@ -47,9 +48,18 @@ cd repos/xgboost && git submodule update --init --recursive -- dmlc-core
 cd ../..
 
 git clone --recurse-submodules https://github.com/rapidsai/cuspatial -b ${BRANCH} repos/cuspatial
+cd repos/cuspatial
+git submodule sync --recursive && git submodule update --init --recursive
+cd ../..
 
 git clone --recurse-submodules https://github.com/rapidsai/cuDataShader repos/cudatashader
 
 # ucx
 git clone https://github.com/openucx/ucx -b ${UCX_BRANCH} repos/ucx
 git clone https://github.com/rapidsai/ucx-py -b ${BRANCH} repos/ucx-py
+
+# blazingsql
+git clone https://github.com/BlazingDB/blazingsql repos/blazingsql
+
+git clone https://github.com/dask/dask repos/dask
+git clone https://github.com/dask/distributed repos/distributed
